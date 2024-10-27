@@ -1,0 +1,34 @@
+.search-box {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .search-input, .search-select {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .search-button {
+    padding: 5px 15px;
+    background-color: #ffcc00; /* Amarelo para lembrar o tema Pokémon */
+    border: 1px solid #b38b00;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .search-button:hover {
+    background-color: #e6b800;
+    transform: scale(1.05);
+  }
+  
+  .search-button:active {
+    background-color: #cc9900;
+    transform: scale(0.95);
+  }
+  
