@@ -1,37 +1,78 @@
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+.Header {
+  background-color: #FF1C1C;
+  padding: 10px 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.App {
+.logo-img {
+  width: 40px;
+}
+
+@media (min-width: 768px) {
+  .logo-img {
+    width: 50px;
+  }
+}
+
+.pokedex-title {
+  color: #FFCC00;
+  text-shadow: 
+    -1px -1px 0 #000,  
+    1px -1px 0 #000,  
+    -1px 1px 0 #000,  
+    1px 1px 0 #000;
+  margin: 0;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #FFEECC;
+}
+
+.search-box {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  gap: 10px;
   width: 100%;
-  background-color: aliceblue;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
 }
 
-.Header {
+.search-input, .search-select {
+  width: 100%; 
+}
+
+@media (min-width: 768px) {
+  .search-box {
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 700px) {
+  .Header .logo-img, .Header .pokedex-title {
+    display: none; 
+  }
+}
+
+.pagination-controls {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  background-color: blanchedalmond;
-  position: fixed;
-  top: 0;
-  z-index: 1000;
-  height: 13vh;
-  padding: 0 20px;
+  flex-wrap: wrap; 
+  justify-content: center;
+  gap: 5px;
+  margin-top: 10px;
 }
 
-.LogoHeader img {
-  padding: 3vh;
-  height: 10vh;
-  max-height: 100%;
-  width: auto;
-  object-fit: contain;
+.pagination-controls button {
+  background-color: #FFCC00;
+  color: #000;
+  border: 1px solid #000;
+  padding: 5px 10px;
+  font-size: 14px;
+  flex: 1 0 30px;
+}
+
+@media (min-width: 768px) {
+  .pagination-controls button {
+    padding: 8px 15px;
+    font-size: 16px;
+  }
 }

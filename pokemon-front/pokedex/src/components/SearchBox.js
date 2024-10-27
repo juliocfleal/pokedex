@@ -4,44 +4,48 @@ import "./../SearchBox.css";
 import axios from 'axios';
 import Swal from "sweetalert2";
 
-const SearchBox = () => {
+const SearchBox = ({ onSearch, setTotalItems, fetchPokemonData }) => {
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [habitat, setHabitat] = useState("");
+  const pokemonTypes = [
+    "normal", "fighting", "flying", "poison", "ground",
+    "rock", "bug", "ghost", "steel", "fire",
+    "water", "grass", "electric", "psychic", "ice",
+    "dragon", "dark", "fairy", "stellar", "unknown"
+  ];
+  const pokemonHabitats = [
+    "cave", "forest", "grassland", "mountain", "rare",
+    "rough-terrain", "sea", "urban", "waters-edge"
+  ];
 
   const handleSearch = () => {
-    console.log(`Searching for: Name = ${name}, Type = ${type}, Habitat = ${habitat}`);
-        if(name == "" && type == "" && habitat == ""){
-            Swal.fire({
-                icon: 'warning',
-                title: 'Oops...',
-                text: 'Add any filter!',
-              })
-              return;
-        }
+    if (name == "" && type == "" && habitat == "") {
+      fetchPokemonData(1);
+      return;
+    }
 
-        let params = "?";
-        if (name !== "")  params += `name=${name}`;
-        if (params !== "?" && type !== "")  params += `&&`;
-        if (type !== "")  params += `type=${type}`;
-        if (params !== "?" && habitat !== "") params += `&&`;
-        if (habitat !== "") params += `habitat=${habitat}`;
-        console.log(params );
-        axios.get("http://localhost:8080/pokemon/filter" + params)
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'An error has occurred!',
-          });
-          console.log(error);
+    let params = "?";
+    if (name !== "") params += `name=${name}`;
+    if (params !== "?" && type !== "") params += `&&`;
+    if (type !== "") params += `type=${type}`;
+    if (params !== "?" && habitat !== "") params += `&&`;
+    if (habitat !== "") params += `habitat=${habitat}`;
+    axios.get("http://localhost:8080/pokemon/filter" + params)
+      .then(response => {
+        setTotalItems(response.data.pagedDetails.totalPokemons);
+        onSearch(response.data);
+      })
+      .catch(error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'An error has occurred!',
         });
+        console.log(error);
+      });
 
-      
-    
+
   };
 
   return (
@@ -53,15 +57,17 @@ const SearchBox = () => {
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
-      <select
+<select
         className="search-select"
         value={type}
         onChange={(e) => setType(e.target.value)}
       >
         <option value="">Select Type</option>
-        <option value="fire">Fire</option>
-        <option value="water">Water</option>
-        <option value="grass">Grass</option>
+        {pokemonTypes.map((type, index) => (
+          <option key={index} value={type}>
+            {type.charAt(0).toUpperCase() + type.slice(1)}
+          </option>
+        ))}
       </select>
       <select
         className="search-select"
@@ -69,9 +75,11 @@ const SearchBox = () => {
         onChange={(e) => setHabitat(e.target.value)}
       >
         <option value="">Select Habitat</option>
-        <option value="forest">Forest</option>
-        <option value="cave">Cave</option>
-        <option value="sea">Sea</option>
+        {pokemonHabitats.map((habitat, index) => (
+          <option key={index} value={habitat}>
+            {habitat.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+          </option>
+        ))}
       </select>
       <button className="search-button" onClick={handleSearch}>
         Search
