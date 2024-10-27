@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.pokemon</groupId>
-	<artifactId>Pokedex</artifactId>
+	<artifactId>Pokedex-back</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>pokemon</name>
 	<description>Backend project to show pokemons</description>
