@@ -3,6 +3,7 @@ import './App.css';
 import PokedexHeader from './components/PokedexHeader';
 import PokemonTable from './components/PokemonTable';
 import axios from 'axios';
+import Swal from "sweetalert2";
 
 
 function App() {
