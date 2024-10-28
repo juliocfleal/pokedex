@@ -18,6 +18,11 @@ function App() {
       setPokemonData(response.data);
       setTotalItems(response.data.pagedDetails.totalPokemons);
     } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'An error has occurred!',
+      });
       console.error('Error fetching data:', error);
     }
   };
