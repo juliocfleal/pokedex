@@ -39,7 +39,7 @@ public class PokemonControllerTest {
         PokemonDetails mockPokemon = PokemonTestUtil.createAPokemonDetails();
         when(pokemonServices.getById(1)).thenReturn(mockPokemon);
 
-        mockMvc.perform(get("/pokemon/getbyid/1")
+        mockMvc.perform(get("/api/pokemon/getbyid/1")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("bulbasaur"))
@@ -54,7 +54,7 @@ public class PokemonControllerTest {
 
         when(pokemonServices.getPokemons("saur","","",0,10)).thenReturn(pagedAllPokemons);
 
-        mockMvc.perform(get("/pokemon/filter?name=saur")
+        mockMvc.perform(get("/api/pokemon/filter?name=saur")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.pokemons[0].name").value("bulbasaur"))
@@ -68,7 +68,7 @@ public class PokemonControllerTest {
 
         when(pokemonServices.getAllPokemonsPaginated(0,10)).thenReturn(pagedAllPokemons);
 
-        mockMvc.perform(get("/pokemon")
+        mockMvc.perform(get("/api/pokemon")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.pokemons[0].name").value("bulbasaur"))
