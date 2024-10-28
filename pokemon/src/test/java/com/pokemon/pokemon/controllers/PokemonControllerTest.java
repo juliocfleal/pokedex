@@ -1,9 +1,7 @@
 package com.pokemon.pokemon.controllers;
 
-import com.pokemon.pokemon.Entities.Pokemon;
 import com.pokemon.pokemon.clients.PokeApiClient;
 import com.pokemon.pokemon.dto.PagedAllPokemons;
-import com.pokemon.pokemon.dto.PagedDetails;
 import com.pokemon.pokemon.dto.PokemonDetails;
 import com.pokemon.pokemon.services.PokemonServices;
 import com.pokemon.pokemon.util.PokemonTestUtil;
@@ -15,14 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

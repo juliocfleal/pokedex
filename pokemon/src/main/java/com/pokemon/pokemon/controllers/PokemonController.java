@@ -1,15 +1,12 @@
 package com.pokemon.pokemon.controllers;
 
-import com.pokemon.pokemon.Entities.Pokemon;
+
 import com.pokemon.pokemon.dto.PagedAllPokemons;
-import com.pokemon.pokemon.dto.PagedDetails;
 import com.pokemon.pokemon.dto.PokemonDetails;
 import com.pokemon.pokemon.services.PokemonServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController

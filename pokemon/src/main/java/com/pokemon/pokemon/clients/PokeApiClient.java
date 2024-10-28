@@ -37,13 +37,13 @@ public class PokeApiClient {
                 List<Map<String, String>> results = (List<Map<String, String>>) allPokemons.get("results");
                 results.forEach(this::createEachPokemon);
             } else {
-                System.err.println("Nenhum Pokémon encontrado.");
+                System.err.println("No Pokémon found.");
                 throw new IllegalArgumentException();
             }
             System.err.println("Cache all pokemons from API is complete.");
 
         } catch (Exception e) {
-            System.err.println("Erro ao buscar os Pokémon: " + e.getMessage());
+            System.err.println("Error when searching for Pokémon:" + e.getMessage());
         }
     }
 
@@ -61,7 +61,7 @@ public class PokeApiClient {
                 newPokemon.setType(getPokemonTypes(pokemonDetails));
                 newPokemon.setHabitat(getPokemonHabitats(pokemonDetails));
             } else {
-                System.err.println("Nenhuma resposta recebida para o Pokémon na URL: " + url);
+                System.err.println("No response received for Pokémon in URL: " + url);
             }
 
             if (newPokemon != null) {
@@ -80,7 +80,7 @@ public class PokeApiClient {
         if (matcher.find()) {
             number = Integer.parseInt(matcher.group(1));
         } else {
-            System.out.println("Nenhum número encontrado.");
+            System.out.println("No numbers found.");
         }
         return number;
     }
