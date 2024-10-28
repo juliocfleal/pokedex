@@ -9,7 +9,7 @@ const PokemonTable = ({ data, currentPage, setCurrentPage, totalItems, itemsPerP
 
 
   const showPokemon = (id) => {
-    axios.get("http://localhost:8080/pokemon/getbyid/" + id)
+    axios.get(process.env.REACT_APP_API_BASE_URL + "/pokemon/getbyid/" + id)
     .then(response => {
       const { name, imageUrl, abilities, baseExperience, height, type } = response.data;
 

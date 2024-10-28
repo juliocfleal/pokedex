@@ -14,7 +14,7 @@ function App() {
   const fetchPokemonData = async (page) => {
     try {
       page = page != "" ? page -1 : 0;
-      const response = await axios.get('http://localhost:8080/pokemon?size' + itemsPerPage + "&&page=" + page);
+      const response = await axios.get(process.env.REACT_APP_API_BASE_URL + '/pokemon?size' + itemsPerPage + "&&page=" + page);
       setPokemonData(response.data);
       setTotalItems(response.data.pagedDetails.totalPokemons);
     } catch (error) {

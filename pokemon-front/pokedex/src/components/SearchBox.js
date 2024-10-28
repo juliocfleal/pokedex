@@ -31,7 +31,7 @@ const SearchBox = ({ onSearch, setTotalItems, fetchPokemonData }) => {
     if (type !== "") params += `type=${type}`;
     if (params !== "?" && habitat !== "") params += `&&`;
     if (habitat !== "") params += `habitat=${habitat}`;
-    axios.get("http://localhost:8080/pokemon/filter" + params)
+    axios.get(process.env.REACT_APP_API_BASE_URL + "/pokemon/filter" + params)
       .then(response => {
         setTotalItems(response.data.pagedDetails.totalPokemons);
         onSearch(response.data);

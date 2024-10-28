@@ -6,6 +6,8 @@
 
 .logo-img {
   width: 40px;
+  background-color: #FFEECC;
+  padding: 4px;
 }
 
 @media (min-width: 768px) {
