@@ -38,10 +38,8 @@ public class PokeApiClient {
                 results.forEach(this::createEachPokemon);
             } else {
                 System.err.println("No Pokémon found.");
-                throw new IllegalArgumentException();
             }
             System.err.println("Cache all pokemons from API is complete.");
-
         } catch (Exception e) {
             System.err.println("Error when searching for Pokémon:" + e.getMessage());
         }
