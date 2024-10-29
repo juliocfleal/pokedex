@@ -88,7 +88,7 @@ const PokemonTable = ({ data, currentPage, setCurrentPage, totalItems, itemsPerP
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
         >
-          Previous
+          <i className="bi bi-arrow-left"></i>
         </button>
         {[...Array(totalPages)].map((_, index) => (
           <button 
@@ -104,7 +104,7 @@ const PokemonTable = ({ data, currentPage, setCurrentPage, totalItems, itemsPerP
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
         >
-          Next
+          <i className="bi bi-arrow-right"></i> 
         </button>
       </div>
     </div>

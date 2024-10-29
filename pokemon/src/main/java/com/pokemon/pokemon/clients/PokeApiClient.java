@@ -29,7 +29,6 @@ public class PokeApiClient {
     private WebClient webClient;
 
     private final List<Pokemon> allPokemons = new ArrayList<>();
-    private boolean isCachePopulated = false;
 
     @PostConstruct
     public void getAllPokemons() {
@@ -42,10 +41,8 @@ public class PokeApiClient {
             } else {
                 System.err.println("No Pokémon found.");
             }
-            isCachePopulated = true;
             System.err.println("Cache all pokemons from API is complete.");
         } catch (Exception e) {
-            isCachePopulated = true;
             System.err.println("Error when searching for Pokémon:" + e.getMessage());
         }
     }
@@ -106,16 +103,10 @@ public class PokeApiClient {
 
     @Cacheable(value = "pokemonCache")
     public List<Pokemon> getAllPokemonsCached() {
-        if(!isCachePopulated){
-            return new ArrayList<>();
-        }
         return new ArrayList<>(allPokemons);
     }
 
     private String getPokemonHabitats(Map<String, Object> pokemonDetails) {
-        if(!isCachePopulated){
-            return null;
-        }
         Map<String, Object> speciesMap = (Map<String, Object>) pokemonDetails.get("species");
         if (speciesMap == null) {
             return null;
