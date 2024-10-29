@@ -3,49 +3,47 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import Swal from "sweetalert2";
 
-const PokemonTable = ({ data, currentPage, setCurrentPage, totalItems, itemsPerPage, fetchPokemonData}) => {
-  const pokemonList = data.pokemons || [];
+const PokemonTable = ({ data, currentPage, setCurrentPage, totalItems, itemsPerPage, fetchPokemonData }) => {
+  const pokemonList = data || [];
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-
 
   const showPokemon = (id) => {
     axios.get(process.env.REACT_APP_API_BASE_URL + "/pokemon/getbyid/" + id)
-    .then(response => {
-      const { name, imageUrl, abilities, baseExperience, height, type } = response.data;
+      .then(response => {
+        const { name, imageUrl, abilities, baseExperience, height, type } = response.data;
 
-      const abilitiesText = abilities ? abilities.join(", ") : "N/A";
-      const typesText = type ? type.join(", ") : "N/A";
-      const htmlContent = `
-        <strong>Abilities:</strong> ${abilitiesText} <br>
-        <strong>Base Experience:</strong> ${baseExperience} <br>
-        <strong>Height:</strong> ${height} <br>
-        <strong>Type:</strong> ${typesText}
-      `;
-  
-      Swal.fire({
-        title: name,
-        html: htmlContent, 
-        imageUrl: imageUrl,
-        imageWidth: 200,
-        imageHeight: 200,
-        showCloseButton: true,
-        imageAlt: "Custom image"
+        const abilitiesText = abilities ? abilities.join(", ") : "N/A";
+        const typesText = type ? type.join(", ") : "N/A";
+        const htmlContent = `
+          <strong>Abilities:</strong> ${abilitiesText} <br>
+          <strong>Base Experience:</strong> ${baseExperience} <br>
+          <strong>Height:</strong> ${height} <br>
+          <strong>Type:</strong> ${typesText}
+        `;
+
+        Swal.fire({
+          title: name,
+          html: htmlContent,
+          imageUrl: imageUrl,
+          imageWidth: 200,
+          imageHeight: 200,
+          showCloseButton: true,
+          imageAlt: "Custom image"
+        });
+      })
+      .catch(error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'An error has occurred!',
+        });
+        console.log(error);
       });
-    })
-    .catch(error => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'An error has occurred!',
-      });
-      console.log(error);
-    });
-  
-  }
+  };
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
-        fetchPokemonData(newPage);
+      fetchPokemonData(newPage);
       setCurrentPage(newPage);
     }
   };
@@ -64,7 +62,7 @@ const PokemonTable = ({ data, currentPage, setCurrentPage, totalItems, itemsPerP
         <tbody>
           {pokemonList.length > 0 ? (
             pokemonList.map((pokemon, index) => (
-                <tr 
+              <tr 
                 key={index} 
                 onClick={() => showPokemon(pokemon.id)}
                 style={{ cursor: 'pointer' }}>
@@ -84,9 +82,9 @@ const PokemonTable = ({ data, currentPage, setCurrentPage, totalItems, itemsPerP
         </tbody>
       </table>
 
-      <div className="pagination-controls d-flex justify-content-center mt-4">
+      <div className="pagination-controls mt-4">
         <button 
-          className="btn btn-secondary mx-1"
+          className="btn mx-1"
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
         >
@@ -95,14 +93,14 @@ const PokemonTable = ({ data, currentPage, setCurrentPage, totalItems, itemsPerP
         {[...Array(totalPages)].map((_, index) => (
           <button 
             key={index}
-            className={`btn mx-1 ${currentPage === index + 1 ? 'btn-primary' : 'btn-outline-primary'}`}
+            className={`btn mx-1 page-btn ${currentPage === index + 1 ? 'active' : ''}`}
             onClick={() => handlePageChange(index + 1)}
           >
             {index + 1}
           </button>
         ))}
         <button 
-          className="btn btn-secondary mx-1"
+          className="btn mx-1"
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
         >

@@ -20,31 +20,7 @@ const SearchBox = ({ onSearch, setTotalItems, fetchPokemonData }) => {
   ];
 
   const handleSearch = () => {
-    if (name == "" && type == "" && habitat == "") {
-      fetchPokemonData(1);
-      return;
-    }
-
-    let params = "?";
-    if (name !== "") params += `name=${name}`;
-    if (params !== "?" && type !== "") params += `&&`;
-    if (type !== "") params += `type=${type}`;
-    if (params !== "?" && habitat !== "") params += `&&`;
-    if (habitat !== "") params += `habitat=${habitat}`;
-    axios.get(process.env.REACT_APP_API_BASE_URL + "/pokemon/filter" + params)
-      .then(response => {
-        setTotalItems(response.data.pagedDetails.totalPokemons);
-        onSearch(response.data);
-      })
-      .catch(error => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'An error has occurred!',
-        });
-        console.log(error);
-      });
-
+    onSearch({ name, type, habitat });
 
   };
 

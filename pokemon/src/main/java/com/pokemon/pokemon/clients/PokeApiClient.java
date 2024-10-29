@@ -2,6 +2,7 @@ package com.pokemon.pokemon.clients;
 
 import com.pokemon.pokemon.Entities.Pokemon;
 import com.pokemon.pokemon.dto.PokemonDetails;
+import jakarta.annotation.PostConstruct;
 import org.apache.logging.log4j.util.InternalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
@@ -10,10 +11,11 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-
+import org.springframework.boot.ApplicationRunner;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,9 +29,10 @@ public class PokeApiClient {
     private WebClient webClient;
 
     private final List<Pokemon> allPokemons = new ArrayList<>();
+    private boolean isCachePopulated = false;
 
-    @EventListener(ContextRefreshedEvent.class)
-    protected void getAllPokemons() {
+    @PostConstruct
+    public void getAllPokemons() {
         try {
             Map<String, Object> allPokemons = getAllPokemonsFromAPI();
 
@@ -39,13 +42,16 @@ public class PokeApiClient {
             } else {
                 System.err.println("No Pokémon found.");
             }
+            isCachePopulated = true;
             System.err.println("Cache all pokemons from API is complete.");
         } catch (Exception e) {
+            isCachePopulated = true;
             System.err.println("Error when searching for Pokémon:" + e.getMessage());
         }
     }
 
     private void createEachPokemon(Map<String, String> pokemon) {
+        System.out.println("Creating each pokemon: " + pokemon);
         if (pokemon.containsKey("url") && pokemon.containsKey("name")) {
             String url = pokemon.get("url");
             String name = pokemon.get("name");
@@ -100,10 +106,16 @@ public class PokeApiClient {
 
     @Cacheable(value = "pokemonCache")
     public List<Pokemon> getAllPokemonsCached() {
+        if(!isCachePopulated){
+            return new ArrayList<>();
+        }
         return new ArrayList<>(allPokemons);
     }
 
     private String getPokemonHabitats(Map<String, Object> pokemonDetails) {
+        if(!isCachePopulated){
+            return null;
+        }
         Map<String, Object> speciesMap = (Map<String, Object>) pokemonDetails.get("species");
         if (speciesMap == null) {
             return null;
