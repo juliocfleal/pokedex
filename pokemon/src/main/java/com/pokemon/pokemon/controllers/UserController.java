@@ -3,6 +3,7 @@ package com.pokemon.pokemon.controllers;
 import com.pokemon.pokemon.Entities.Pokemon;
 import com.pokemon.pokemon.dto.AddPokemonToUserDTO;
 import com.pokemon.pokemon.dto.DefaultError;
+import com.pokemon.pokemon.dto.UserDetailsDTO;
 import com.pokemon.pokemon.services.PokemonServices;
 import com.pokemon.pokemon.services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,10 @@ public class UserController {
     @Autowired
     private UserServices userService;
 
+    @GetMapping(value = "/userDetails")
+    public ResponseEntity<UserDetailsDTO> getUserDetails() throws Exception {
+        return ResponseEntity.ok().body(userService.getUserDetails());
+    }
 
     @PostMapping(value = "/insertPokemonToUser")
     public ResponseEntity<Pokemon> insertPokemonToUser(@RequestBody AddPokemonToUserDTO pokemonToUserDTO) throws Exception {

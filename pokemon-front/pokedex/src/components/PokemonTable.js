@@ -2,8 +2,9 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import Swal from "sweetalert2";
+import catchPokeball from "./../assets/catchPokemon.png";
 
-const PokemonTable = ({ data, currentPage, setCurrentPage, totalItems, itemsPerPage, fetchPokemonData }) => {
+const PokemonTable = ({ data, currentPage, setCurrentPage, totalItems, itemsPerPage, handlePageChange, fetchPokemonData }) => {
   const pokemonList = data || [];
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -44,14 +45,41 @@ const PokemonTable = ({ data, currentPage, setCurrentPage, totalItems, itemsPerP
       });
   };
 
-  const handlePageChange = (newPage) => {
+  const handleNewPageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
-      fetchPokemonData(newPage);
+      handlePageChange(newPage);
       setCurrentPage(newPage);
     }
   };
 
-  const catchPokemon = (pokemonId) => {
+  const catchPokemon = (pokemonId, index) => {
+    axios.post(
+      `${process.env.REACT_APP_API_BASE_URL}/user/insertPokemonToUser`,
+      { "pokemonId": pokemonId },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      }
+    )
+    .then(response => {
+      Swal.fire({
+        icon: 'success',
+        title: 'Gotcha!',
+        text: "You've caught the Pokémon!",
+      });
+      handleNewPageChange(index);
+      console.log(response.data);
+    })
+    .catch(error => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: error.response.data.message,
+      });
+      handleNewPageChange(index);
+      console.error("Error inserting Pokémon:", error);
+    });    
     console.log(`Catching Pokémon with ID: ${pokemonId}`);
   };
 
@@ -82,18 +110,27 @@ const PokemonTable = ({ data, currentPage, setCurrentPage, totalItems, itemsPerP
             {pokemon.nameTrainer ? (
               pokemon.nameTrainer
             ) : (
-              <button 
-                type="button" 
-                className="btn btn-primary btn-sm" 
-                onClick={(e) => {
-                  e.stopPropagation();
-                  catchPokemon(pokemon.id)
-                }}
-              >
-                Catch this Pokémon
-              </button>
+              ""
             )}
           </td>
+          {
+            localStorage.getItem("authToken") ?
+            <td>            <button 
+            type="button" 
+            className="btn btn-outline-success btn-sm" 
+            onClick={(e) => {
+              e.stopPropagation();
+              catchPokemon(pokemon.id, currentPage)
+            }}
+          >Catch!
+                <img 
+      src={catchPokeball} 
+      alt="Pokeball" 
+      style={{ width: "80px", height: "90px", marginLeft: "5px" }}
+    />
+          </button></td>:""
+          }
+
               </tr>
             ))
           ) : (
@@ -109,7 +146,7 @@ const PokemonTable = ({ data, currentPage, setCurrentPage, totalItems, itemsPerP
       <div className="pagination-controls mt-4">
         <button 
           className="btn mx-1"
-          onClick={() => handlePageChange(currentPage - 1)}
+          onClick={() => handleNewPageChange(currentPage - 1)}
           disabled={currentPage === 1}
         >
           <i className="bi bi-arrow-left"></i>
@@ -118,14 +155,14 @@ const PokemonTable = ({ data, currentPage, setCurrentPage, totalItems, itemsPerP
           <button 
             key={index}
             className={`btn mx-1 page-btn ${currentPage === index + 1 ? 'active' : ''}`}
-            onClick={() => handlePageChange(index + 1)}
+            onClick={() => handleNewPageChange(index + 1)}
           >
             {index + 1}
           </button>
         ))}
         <button 
           className="btn mx-1"
-          onClick={() => handlePageChange(currentPage + 1)}
+          onClick={() => handleNewPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
         >
           <i className="bi bi-arrow-right"></i> 

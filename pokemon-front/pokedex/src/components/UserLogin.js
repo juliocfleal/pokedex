@@ -2,12 +2,15 @@ import React , {useState}from "react";
 import "./../App.css";
 import axios from 'axios';
 import Swal from "sweetalert2";
+import "./../App.css";
+import { useNavigate } from "react-router-dom";
+import UserHeader from "./UserHeader";
 
 const UserLogin = ({ onSearch, setTotalItems, fetchPokemonData }) => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
       e.preventDefault();
@@ -17,7 +20,6 @@ const UserLogin = ({ onSearch, setTotalItems, fetchPokemonData }) => {
         "password":password
       })
       .then(response => {
-        console.log(response);
 
         const token = response.data?.password;
         if (token) {
@@ -26,7 +28,7 @@ const UserLogin = ({ onSearch, setTotalItems, fetchPokemonData }) => {
             icon: 'success',
             title: 'Logged in!',
             text: 'You have successfully logged in.',
-          });
+          }).then(navigate("/"));
         } else {
           Swal.fire({
             icon: 'warning',
@@ -47,6 +49,8 @@ const UserLogin = ({ onSearch, setTotalItems, fetchPokemonData }) => {
 
   
     return (
+      <>
+        <UserHeader/>
       <div className="d-flex justify-content-center align-items-center vh-100">
         <div className="card p-4 shadow-lg bg-danger" style={{ width: '100%', maxWidth: '400px' }}>
           <h2 className="text-center mb-4">Login</h2>
@@ -79,6 +83,7 @@ const UserLogin = ({ onSearch, setTotalItems, fetchPokemonData }) => {
           </form>
         </div>
       </div>
+      </>
     );
   
 };

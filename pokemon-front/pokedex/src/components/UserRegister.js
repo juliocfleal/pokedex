@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import "./../App.css";
 import axios from 'axios';
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import UserHeader from "./UserHeader";
 
 const UserRegister = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -17,14 +20,14 @@ const UserRegister = () => {
         })
         .then(response => {
             console.log(response);
-            const token = response.data?.password;
+            const token = response.data.token;
             if (token) {
               localStorage.setItem("authToken", token);
             Swal.fire({
                 icon: 'success',
                 title: 'Registered!',
                 text: 'Your account has been created successfully.',
-            });
+            }).then(navigate("/"));
         }
         })
         .catch(error => {
@@ -49,6 +52,8 @@ const UserRegister = () => {
     };
 
     return (
+        <>
+        <UserHeader/>
         <div className="d-flex justify-content-center align-items-center vh-100">
             <div className="card p-4 shadow-lg bg-primary" style={{ width: '100%', maxWidth: '400px' }}>
                 <h2 className="text-center mb-4">Register</h2>
@@ -93,6 +98,7 @@ const UserRegister = () => {
                 </form>
             </div>
         </div>
+        </>
     );
 };
 

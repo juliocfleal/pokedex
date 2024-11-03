@@ -6,11 +6,14 @@ import com.pokemon.pokemon.clients.PokeApiClient;
 import com.pokemon.pokemon.componets.SecurityFilter;
 import com.pokemon.pokemon.controllers.Exceptions.PokemonAlreadyHaveATrainerException;
 import com.pokemon.pokemon.dto.AddPokemonToUserDTO;
+import com.pokemon.pokemon.dto.UserDetailsDTO;
 import com.pokemon.pokemon.repositories.UserRepositories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserServices {
@@ -67,6 +70,7 @@ public class UserServices {
         }
         user.removePokemon(id);
         pokemon.setNameTrainer(null);
+        userRepositories.save(user);
         pokeApiCliente.cachePokemon(pokemon);
     }
 
@@ -81,5 +85,24 @@ public class UserServices {
             pokeApiCliente.cachePokemon(pokemonToDelete);
         });
         userRepositories.delete(user);
+    }
+
+    public UserDetailsDTO getUserDetails() {
+        User user = securityFilter.getAuthenticatedUser();
+        if (user == null) {
+            throw new IllegalArgumentException("User Not Found");
+        }
+        user.setPassword(null);
+        UserDetailsDTO userDetailsDTO = new UserDetailsDTO();
+        userDetailsDTO.setUser(user);
+        List<Pokemon> pokemons = new ArrayList<Pokemon>();
+        user.getPokemonsIds().forEach(
+                pokemonId -> {
+                    Pokemon pokemon = pokeApiCliente.getPokemonById(pokemonId);
+                    pokemons.add(pokemon);
+                }
+        );
+        userDetailsDTO.setPokemons(pokemons);
+        return userDetailsDTO;
     }
 }
