@@ -6,7 +6,6 @@ import com.pokemon.pokemon.dto.PagedAllPokemons;
 import com.pokemon.pokemon.dto.PagedDetails;
 import com.pokemon.pokemon.dto.PokemonDetails;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -63,8 +62,13 @@ public class PokemonServices {
         return allPokemons;
     }
 
+    public Pokemon getPokemonById(int id) {
+        Pokemon pokemon = pokeApiCliente.getPokemonById(id);
+        return pokemon;
+    }
+
     public PokemonDetails getById(Integer id) {
-        PokemonDetails pokemon = pokeApiCliente.getPokemonById(id);
+        PokemonDetails pokemon = pokeApiCliente.getPokemonDetailsById(id);
         return pokemon;
     }
 }

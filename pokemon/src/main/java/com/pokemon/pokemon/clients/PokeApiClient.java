@@ -7,15 +7,10 @@ import org.apache.logging.log4j.util.InternalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
-import org.springframework.boot.ApplicationRunner;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -92,8 +87,8 @@ public class PokeApiClient {
 
 
     @CachePut(value = "pokemonCache", key = "#newPokemon.name")
-    public void cachePokemon(Pokemon newPokemon) {
-
+    public Pokemon cachePokemon(Pokemon newPokemon) {
+        return newPokemon;
     }
 
     @Cacheable(value = "pokemonCache", key = "#name")
@@ -152,7 +147,17 @@ public class PokeApiClient {
         return consultPokeApi("/pokemon?limit=100000");
     }
 
-    public PokemonDetails getPokemonById(Integer id) {
+    @Cacheable(value = "pokemonCache", key = "#id")
+    public Pokemon getPokemonById(int id){
+        for (Pokemon pokemon : allPokemons) {
+            if (pokemon.getId() == id) {
+                return pokemon;
+            }
+        }
+        return null;
+    }
+
+    public PokemonDetails getPokemonDetailsById(Integer id) {
         Map<String, Object> pokemonFullDetails =  consultPokeApi("/pokemon/" + id);
         PokemonDetails pokemonDetails = new PokemonDetails();
         pokemonDetails.setId(id);
@@ -176,6 +181,7 @@ public class PokeApiClient {
         Map<String, Object> sprites = (Map<String, Object>) pokemonFullDetails.get("sprites");
         String imageUrl = (String) sprites.get("front_default");
         pokemonDetails.setImageUrl(imageUrl);
+        pokemonDetails.setTrainerName(getPokemonById(id).getNameTrainer() != null ? getPokemonById(id).getNameTrainer() : null);
         return pokemonDetails;
     }
 

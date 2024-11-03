@@ -19,4 +19,5 @@ public class PokemonDetails {
     private Integer baseExperience;
     private Integer height;
     private String imageUrl;
+    private String trainerName;
 }
