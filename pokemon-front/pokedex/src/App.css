@@ -94,3 +94,13 @@
     transform: scale(1.15);
   }
 }
+
+.table-container {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.table-container table {
+  width: 100%;
+  min-width: 600px; /* Ajuste conforme necessário */
+}

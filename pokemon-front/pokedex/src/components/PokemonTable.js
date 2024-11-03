@@ -85,6 +85,7 @@ const PokemonTable = ({ data, currentPage, setCurrentPage, totalItems, itemsPerP
 
   return (
     <div className="container mt-4">
+      <div className="table-container">
       <table className="table table-bordered table-striped">
         <thead className="thead-dark">
           <tr>
@@ -142,7 +143,7 @@ const PokemonTable = ({ data, currentPage, setCurrentPage, totalItems, itemsPerP
           )}
         </tbody>
       </table>
-
+      </div>
       <div className="pagination-controls mt-4">
         <button 
           className="btn mx-1"
@@ -167,6 +168,7 @@ const PokemonTable = ({ data, currentPage, setCurrentPage, totalItems, itemsPerP
         >
           <i className="bi bi-arrow-right"></i> 
         </button>
+
       </div>
     </div>
   );
