@@ -4,6 +4,7 @@ import com.pokemon.pokemon.Entities.Pokemon;
 import com.pokemon.pokemon.Entities.User;
 import com.pokemon.pokemon.clients.PokeApiClient;
 import com.pokemon.pokemon.componets.SecurityFilter;
+import com.pokemon.pokemon.controllers.Exceptions.PokemonAlreadyHaveATrainerException;
 import com.pokemon.pokemon.dto.AddPokemonToUserDTO;
 import com.pokemon.pokemon.repositories.UserRepositories;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +34,13 @@ public class UserServices {
                 throw new IllegalArgumentException("The pokemon id does not exist.");
             }
             if (pokemon.getNameTrainer() != null) {
-                throw new IllegalArgumentException("Pokemon already have a trainer.");
+                throw new PokemonAlreadyHaveATrainerException("Pokemon already have a trainer. The trainer is: " + pokemon.getNameTrainer());
             }
-            System.out.println(pokemon);
 
             User user = securityFilter.getAuthenticatedUser();
             if (user == null) {
                 throw new IllegalArgumentException("User Not Found");
             }
-            System.out.println(user.getPokemonsIds());
             if(user.getPokemonsIds().size() > 3){
                 throw new IllegalArgumentException("Too many pokemon ids.");
             }
@@ -51,9 +50,23 @@ public class UserServices {
             System.out.println(user.toString());
             pokeApiCliente.cachePokemon(pokemon);
             return pokemon;
-
-
     }
 
 
+    public void deletePokemonFromUser(int id) {
+        Pokemon pokemon = pokeApiCliente.getPokemonById(id);
+        if (pokemon == null) {
+            throw new IllegalArgumentException("The pokemon id does not exist.");
+        }
+        if (pokemon.getNameTrainer() == null) {
+            throw new IllegalArgumentException("Pokemon does not have a trainer.");
+        }
+        User user = securityFilter.getAuthenticatedUser();
+        if (user == null) {
+            throw new IllegalArgumentException("User Not Found");
+        }
+        user.removePokemon(id);
+        pokemon.setNameTrainer(null);
+        pokeApiCliente.cachePokemon(pokemon);
+    }
 }

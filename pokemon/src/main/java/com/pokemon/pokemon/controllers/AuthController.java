@@ -36,9 +36,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody RegisterRequestDTO body){
-        Optional<User> user = this.repository.findByEmail(body.getEmail());
 
-        if(user.isEmpty()) {
             User newUser = new User();
             newUser.setPassword(passwordEncoder.encode(body.getPassword()));
             newUser.setEmail(body.getEmail());
@@ -47,7 +45,6 @@ public class AuthController {
 
             String token = this.tokenService.generateToken(newUser);
             return ResponseEntity.ok(new LoginResponseDTO(newUser.getName(), token));
-        }
-        return ResponseEntity.badRequest().build();
+
     }
 }

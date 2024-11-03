@@ -20,4 +20,5 @@ public class Pokemon implements Serializable {
     private String habitat;
     private List<String> type;
     private String nameTrainer;
+    private String thumbnailUrl;
 }

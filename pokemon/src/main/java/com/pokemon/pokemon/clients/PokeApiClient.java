@@ -51,11 +51,11 @@ public class PokeApiClient {
             newPokemon.setName(name);
             newPokemon.setUrl(url);
             Map<String, Object> pokemonDetails = consultPokeApi(url);
-
             if (pokemonDetails != null) {
                 newPokemon.setId(getPokemonId(url));
                 newPokemon.setType(getPokemonTypes(pokemonDetails));
                 newPokemon.setHabitat(getPokemonHabitats(pokemonDetails));
+                newPokemon.setThumbnailUrl(getPokemonThumbnail(pokemonDetails));
             } else {
                 System.err.println("No response received for Pokémon in URL: " + url);
             }
@@ -67,6 +67,21 @@ public class PokeApiClient {
             System.err.println("Objeto Pokémon não possui uma URL.");
         }
     }
+
+    private String getPokemonThumbnail(Map<String, Object> pokemonDetails) {
+        Map<String, Object> sprites = (Map<String, Object>) pokemonDetails.get("sprites");
+        if (sprites == null) {
+            return null;
+        }
+
+        String thumbnailUrl = (String) sprites.get("front_default");
+        if (thumbnailUrl == null) {
+            return null;
+        }
+
+        return thumbnailUrl;
+    }
+
 
     private int getPokemonId(String url) {
         int number = 0;

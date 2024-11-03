@@ -19,6 +19,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String name;
+
     @Column(unique = true)
     private String email;
     private String password;
@@ -31,6 +32,15 @@ public class User {
             throw new IllegalArgumentException("This user already has 3 pokemons.");
         }
         pokemonsIds.add(pokemon.getId());
+        return true;
+    }
+
+    public boolean removePokemon(int id) {
+        if (!pokemonsIds.isEmpty()) {
+            pokemonsIds.remove(Integer.valueOf(id));
+        }else{
+            return false;
+        }
         return true;
     }
 

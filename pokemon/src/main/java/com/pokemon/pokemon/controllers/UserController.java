@@ -33,4 +33,10 @@ public class UserController {
     public ResponseEntity<Pokemon> insertPokemonToUser(@RequestBody AddPokemonToUserDTO pokemonToUserDTO) throws Exception {
         return ResponseEntity.ok().body(userService.insertPokemonToUser(pokemonToUserDTO));
     }
+
+    @DeleteMapping(value = "/removePokemon/{id}")
+    public ResponseEntity<Void> removePokemon(@PathVariable("id") int id) throws Exception {
+            userService.deletePokemonFromUser(id);
+        return ResponseEntity.noContent().build();
+    }
 }
