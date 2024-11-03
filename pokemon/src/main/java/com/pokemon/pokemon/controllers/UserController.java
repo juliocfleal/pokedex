@@ -39,4 +39,10 @@ public class UserController {
             userService.deletePokemonFromUser(id);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping(value = "/removeUser")
+    public ResponseEntity<Void> removeUser() throws Exception {
+        userService.deleteUser();
+        return ResponseEntity.noContent().build();
+    }
 }

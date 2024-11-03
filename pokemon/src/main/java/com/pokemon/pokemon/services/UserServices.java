@@ -69,4 +69,17 @@ public class UserServices {
         pokemon.setNameTrainer(null);
         pokeApiCliente.cachePokemon(pokemon);
     }
+
+    public void deleteUser() {
+        User user = securityFilter.getAuthenticatedUser();
+        if (user == null) {
+            throw new IllegalArgumentException("User Not Found");
+        }
+        user.getPokemonsIds().forEach(pokemonId -> {
+            Pokemon pokemonToDelete = pokeApiCliente.getPokemonById(pokemonId);
+            pokemonToDelete.setNameTrainer(null);
+            pokeApiCliente.cachePokemon(pokemonToDelete);
+        });
+        userRepositories.delete(user);
+    }
 }

@@ -4,6 +4,8 @@ import PokedexHeader from './components/PokedexHeader';
 import PokemonTable from './components/PokemonTable';
 import axios from 'axios';
 import Swal from "sweetalert2";
+import UserLogin from './components/UserLogin';
+import UserRegister from './components/UserRegister';
 
 function App() {
   const [pokemonData, setPokemonData] = useState([]);
@@ -73,6 +75,8 @@ function App() {
         <PokedexHeader onSearch={handleSearch} />
       </header>
       <div className="App">
+        {/* <UserRegister/> */}
+        {/* <UserLogin/> */}
         <PokemonTable
           data={pokemonData}
           currentPage={currentPage}

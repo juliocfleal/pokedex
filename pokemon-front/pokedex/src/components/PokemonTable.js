@@ -10,17 +10,20 @@ const PokemonTable = ({ data, currentPage, setCurrentPage, totalItems, itemsPerP
   const showPokemon = (id) => {
     axios.get(process.env.REACT_APP_API_BASE_URL + "/pokemon/getbyid/" + id)
       .then(response => {
-        const { name, imageUrl, abilities, baseExperience, height, type } = response.data;
+        const { name, imageUrl, abilities, baseExperience, height, type, trainerName} = response.data;
 
         const abilitiesText = abilities ? abilities.join(", ") : "N/A";
         const typesText = type ? type.join(", ") : "N/A";
-        const htmlContent = `
+        let htmlContent = `
           <strong>Abilities:</strong> ${abilitiesText} <br>
           <strong>Base Experience:</strong> ${baseExperience} <br>
           <strong>Height:</strong> ${height} <br>
           <strong>Type:</strong> ${typesText}
         `;
-
+        if(trainerName != null){
+          htmlContent = htmlContent + `<br><strong>Trainer:</strong> ${trainerName}`;
+        }
+        
         Swal.fire({
           title: name,
           html: htmlContent,
@@ -48,15 +51,20 @@ const PokemonTable = ({ data, currentPage, setCurrentPage, totalItems, itemsPerP
     }
   };
 
+  const catchPokemon = (pokemonId) => {
+    console.log(`Catching Pokémon with ID: ${pokemonId}`);
+  };
+
   return (
     <div className="container mt-4">
       <table className="table table-bordered table-striped">
         <thead className="thead-dark">
           <tr>
-            <th>ID</th>
+            <th></th>
             <th>Name</th>
             <th>Type</th>
             <th>Habitat</th>
+            <th>Trainer</th>
           </tr>
         </thead>
         <tbody>
@@ -66,10 +74,26 @@ const PokemonTable = ({ data, currentPage, setCurrentPage, totalItems, itemsPerP
                 key={index} 
                 onClick={() => showPokemon(pokemon.id)}
                 style={{ cursor: 'pointer' }}>
-                <td>{pokemon.id}</td>
+                <td><img src={pokemon.thumbnailUrl} className="h-50"/></td>
                 <td>{pokemon.name}</td>
                 <td>{pokemon.type.join(", ")}</td>
                 <td>{pokemon.habitat}</td>
+                <td>
+            {pokemon.nameTrainer ? (
+              pokemon.nameTrainer
+            ) : (
+              <button 
+                type="button" 
+                className="btn btn-primary btn-sm" 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  catchPokemon(pokemon.id)
+                }}
+              >
+                Catch this Pokémon
+              </button>
+            )}
+          </td>
               </tr>
             ))
           ) : (
