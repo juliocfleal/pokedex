@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeRequests(authorize -> authorize
                         .requestMatchers("/static/**", "/index.html", "/", "/favicon.ico", "/manifest.json").permitAll()
-                        .requestMatchers("/(account|register|login)(?:/.*)?").permitAll()
+                        .requestMatchers("/account", "/register", "/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/pokemon").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/pokemon/**").permitAll()
