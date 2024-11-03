@@ -33,12 +33,10 @@ public class SecurityConfig {
                 .cors(cors -> cors.configure(http))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize
+                .authorizeRequests(authorize -> authorize
                         .requestMatchers("/static/**", "/index.html", "/", "/favicon.ico", "/manifest.json").permitAll()
-                        .requestMatchers("/account", "/register", "/login", "/account/**", "/register/**", "/login/**").permitAll()
+                        .requestMatchers("/(account|register|login)(?:/.*)?").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/pokemon").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/pokemon/**").permitAll()
                         .anyRequest().authenticated()
