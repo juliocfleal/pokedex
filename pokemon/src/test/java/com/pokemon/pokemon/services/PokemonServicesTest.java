@@ -2,8 +2,10 @@ package com.pokemon.pokemon.services;
 
 import com.pokemon.pokemon.Entities.Pokemon;
 import com.pokemon.pokemon.clients.PokeApiClient;
+import com.pokemon.pokemon.componets.SecurityFilter;
 import com.pokemon.pokemon.dto.PagedAllPokemons;
 import com.pokemon.pokemon.dto.PokemonDetails;
+import com.pokemon.pokemon.repositories.UserRepositories;
 import com.pokemon.pokemon.util.PokemonTestUtil;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -30,6 +32,8 @@ public class PokemonServicesTest {
 
     @MockBean
     private PokeApiClient pokeApiClient;
+
+
 
     @Test
     public void getPokemonByIdTest() throws Exception {

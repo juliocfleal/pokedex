@@ -50,7 +50,6 @@ public class UserServices {
             user.addPokemon(pokemon);
             userRepositories.save(user);
             pokemon.setNameTrainer(user.getName());
-            System.out.println(user.toString());
             pokeApiCliente.cachePokemon(pokemon);
             return pokemon;
     }
