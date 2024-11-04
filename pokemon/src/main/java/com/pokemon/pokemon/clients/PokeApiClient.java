@@ -1,7 +1,9 @@
 package com.pokemon.pokemon.clients;
 
 import com.pokemon.pokemon.Entities.Pokemon;
+import com.pokemon.pokemon.Entities.User;
 import com.pokemon.pokemon.dto.PokemonDetails;
+import com.pokemon.pokemon.repositories.UserRepositories;
 import jakarta.annotation.PostConstruct;
 import org.apache.logging.log4j.util.InternalException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ public class PokeApiClient {
 
     @Autowired
     private WebClient webClient;
+    @Autowired
+    private UserRepositories userRepositories;
 
     private final List<Pokemon> allPokemons = new ArrayList<>();
 
@@ -29,13 +33,23 @@ public class PokeApiClient {
     public void getAllPokemons() {
         try {
             Map<String, Object> allPokemons = getAllPokemonsFromAPI();
-
+            List<User> allUsers = userRepositories.findAll();
             if (allPokemons != null && allPokemons.containsKey("results")) {
                 List<Map<String, String>> results = (List<Map<String, String>>) allPokemons.get("results");
                 results.forEach(this::createEachPokemon);
             } else {
                 System.err.println("No Pokémon found.");
             }
+            allUsers.forEach(user -> {
+                if(user.getPokemonsIds() != null){
+                    user.getPokemonsIds().forEach(id -> {
+                        Pokemon pokemon = getPokemonById(id);
+                        pokemon.setNameTrainer(user.getName());
+                        cachePokemon(pokemon);
+                    });
+                }
+            });
+
             System.err.println("Cache all pokemons from API is complete.");
         } catch (Exception e) {
             System.err.println("Error when searching for Pokémon:" + e.getMessage());
