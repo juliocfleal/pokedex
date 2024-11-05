@@ -31,7 +31,7 @@ public class UserServices {
     @Autowired
     SecurityFilter securityFilter;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Pokemon insertPokemonToUser(AddPokemonToUserDTO pokemonToUserDTO) throws Exception {
 
             Pokemon pokemon = pokeApiCliente.getPokemonById(pokemonToUserDTO.getPokemonId());
@@ -56,7 +56,7 @@ public class UserServices {
             return pokemon;
     }
 
-
+    @Transactional(rollbackFor = Exception.class)
     public void deletePokemonFromUser(int id) {
         Pokemon pokemon = pokeApiCliente.getPokemonById(id);
         if (pokemon == null) {
@@ -75,6 +75,7 @@ public class UserServices {
         pokeApiCliente.cachePokemon(pokemon);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void deleteUser() {
         User user = securityFilter.getAuthenticatedUser();
         if (user == null) {
@@ -88,6 +89,7 @@ public class UserServices {
         userRepositories.delete(user);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public UserDetailsDTO getUserDetails() {
         User user = securityFilter.getAuthenticatedUser();
         if (user == null) {

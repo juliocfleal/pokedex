@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,7 +26,12 @@ public class User {
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<Integer> pokemonsIds;
+    @CollectionTable(
+            name = "tb_user_pokemon_ids",
+            joinColumns = @JoinColumn(name = "user_id")
+    )
+    @Column(name = "pokemon_id")
+    private List<Integer> pokemonsIds = new ArrayList<>();
 
     public boolean addPokemon(Pokemon pokemon) {
         if (pokemonsIds.size() >= 3) {
