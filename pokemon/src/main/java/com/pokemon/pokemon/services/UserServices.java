@@ -10,6 +10,7 @@ import com.pokemon.pokemon.dto.UserDetailsDTO;
 import com.pokemon.pokemon.repositories.UserRepositories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class UserServices {
     @Autowired
     SecurityFilter securityFilter;
 
+    @Transactional
     public Pokemon insertPokemonToUser(AddPokemonToUserDTO pokemonToUserDTO) throws Exception {
 
             Pokemon pokemon = pokeApiCliente.getPokemonById(pokemonToUserDTO.getPokemonId());
